@@ -1,85 +1,97 @@
+
 var isRunning = true
 let bienvenida = "Bienvenido!\nIngrese una opcion" 
-let menuPrincipal = "1. Elegir servicios\n2. Calcular costo\n3. Elegir cuotas\n4. Adquirir servicio\n5. Salir"
-let menuServicios = "1. Armado\n2. Envio a Domicilio\n3. Puesta a Punto\n4. Reiniciar\n5. Listo"
+let menuPrincipal = "1. Elegir servicios\n2. Calcular costo\n3. Elegir cuotas\n4. Adquirir servicio\n5. Administrador\n6. Salir"
+let menuAdmin = "1. Agregar nuevo servicio\n2. Eliminar Servicio\n3. Cantidad de servicios actuales\n4. Listo"
 
-var servArmado = 1000
-var servArmadoActive = false
+let menu1Servicios = "1. Armado\n2. Envio a Domicilio\n3. Puesta a Punto\n4. Reiniciar\n5. Listo"
 
-var servEnvioDomicilio = 500
-var servDomicilioActive = false
 
-var servPuestaAPunto = 2700
-var servPuntoActive = false
+class Servicio {
+    constructor(nombre, costo) {
+        this.nombre  = nombre;
+        this.costo  = parseInt(costo);
+        this.estaActivo = false;
+    }
+
+    activarServicio(){
+        this.estaActivo = true;
+    }
+    desactivarServicio(){
+        this.estaActivo = false;
+    }
+}
+
+const servicios = []
+
+servicios.unshift(new Servicio("Servicio de Armado","2000"));
+servicios.push(new Servicio("Servicio Envio a Domicilio","500"));
+servicios.push(new Servicio("Servicio de Puesta a Punto","700"));
+
+
+
+function menuServicios(){
+    let menuDeServicios = "";
+    let i = 1
+    for (; i <= servicios.length; i++){
+        menuDeServicios += i.toString() + ". " + servicios[i-1].nombre + "\n";
+    }
+    
+
+    return menuDeServicios + (i++).toString() + ". Reiniciar\n" +  (i++).toString() + ". Listo";
+}
+
 
 let cantidadCuotas = 1
 let costoCuota = 0
 
+
 function reiniciarServicios(){
-    servArmadoActive = false
-    servDomicilioActive = false
-    servPuntoActive = false
-    alert("Todos los servicios desactivados")
+
+    for (const servicio of servicios) {
+        servicio.desactivarServicio()
+    }
     cantidadCuotas = 1
     costoCuota = 0
 }
 
 function elegirServicios(){
     let opcionServicio
-    do{
-        opcionServicio = prompt("Elige el servicio que deseas activar:\n" + menuServicios)
-        switch(opcionServicio){
-            case "1":
-                if(servArmadoActive){
+    
+    opcionServicio = parseFloat(prompt("Elige el servicio que deseas activar:\n" + menuServicios()))
+    while(opcionServicio<1 || opcionServicio>servicios.length+2){
+        if(opcionServicio<1 || opcionServicio>servicios.length+2) alert("Debes ingresar un numero correspondiente al servicio");
+        opcionServicio = parseFloat(prompt("Elige el servicio que deseas activar:\n" + menuServicios()));
+    }
+    while(true){
+        //opcionServicio>0 && opcionServicio<=servicios.length+2
+        if(opcionServicio<1 || opcionServicio>servicios.length+2){
+            alert("Debes ingresar un numero correspondiente al servicio");
+        }else{
+            if(opcionServicio<=servicios.length){
+                if(servicios[opcionServicio-1].estaActivo){
                     alert("Ya tienes este servicio activo")
                 }else{
-                    servArmadoActive = true
+                    servicios[opcionServicio-1].activarServicio()
                     alert("Servicio activado")
                 }
-                break;
-            case "2":
-                if(servDomicilioActive){
-                    alert("Ya tienes este servicio activo")
-                }else{
-                    servDomicilioActive = true
-                    alert("Servicio activado")
+            }else{
+                if(opcionServicio==servicios.length+1){
+                    reiniciarServicios();
+                    alert("Servicios reiniciados");
                 }
-                break;
-            case "3":
-                if(servPuntoActive){
-                    alert("Ya tienes este servicio activo")
-                }else{
-                    servPuntoActive = true
-                    alert("Servicio activado")
+                if(opcionServicio==servicios.length+2){
+                    alert("Volviendo al menu principal");
+                    break;
                 }
-                break;
-            case "4":
-                reiniciarServicios()
-                break;
-            case "5":
-                alert("Volviendo a menu principal")
-                break;
-            default:
-                alert("Debes ingresar un numero correspondiente al servicio")
-                break;
+            }
         }
-    }while(opcionServicio!="5")
+        opcionServicio = parseFloat(prompt("Elige el servicio que deseas activar:\n" + menuServicios()));
+    }
 }
 
 function calcularCosto(){
-    let sumaTotal = 0
-    
-    if(servArmadoActive){
-        sumaTotal += servArmado
-    }
-    if(servDomicilioActive){
-        sumaTotal += servEnvioDomicilio
-    }
-    if(servPuntoActive){
-        sumaTotal += servPuestaAPunto
-    }
-
-    return sumaTotal
+    return (servicios.filter(s => s.estaActivo)).length>0?(servicios.filter(s => s.estaActivo).map(s => s.costo)).reduce((prev, next) => prev + next):0;
 }
 
 function calcularCuotas(cantidad){
@@ -108,9 +120,57 @@ function adQuirirServicio(costoTotal,cantidadCuotas){
 
 
 
+function agregarNuevoServicio(){
+    servicios.push(new Servicio(prompt("Ingrese nombre del servicio"),prompt("Ingrese el costo del servicio")))
+    alert("Servicio agregado!\nAhora cuenta con " + servicios.length + " servicios")
+}
+
+function eliminarServicio(){
+    let i = 1
+    let serviciosDisponibles = ""
+    for (; i <= servicios.length; i++){
+        serviciosDisponibles += i.toString() + ". " + servicios[i-1].nombre + "\n";
+    }
+    
+    let servicioEliminado = parseInt(prompt("Elige el servicio a eliminar:\n" + serviciosDisponibles))
+    let nombreServicioEliminado = servicios[servicioEliminado-1].nombre
+    servicios.splice(servicioEliminado-1,1)
+
+    alert("Se elimno el siguiente servicio: \n" + nombreServicioEliminado)
+
+}
+
+
+function opcionesAdministrador(){
+    
+    let runningAdmin = true
+    while(runningAdmin){    
+        opcionAdmin = prompt("Bienvenido admin! Elige una de las opciones:\n" + menuAdmin)
+        switch(opcionAdmin){
+            case "1" :
+                agregarNuevoServicio()
+                break;
+            case "2" :
+                eliminarServicio()
+                break;
+            case "3" :
+                alert("Actualmente cuenta con " + servicios.length + " servicios")
+                break;
+            case "4" :
+                runningAdmin = false
+                alert("Cerrando sesion administrador")
+                break;
+            default : 
+                alert("No se ingreso un numero correcto")
+                break;
+        }
+    }
+    reiniciarServicios()
+}
+
+
 while(isRunning){
     let opcion = prompt(menuPrincipal)
-
 
     switch(opcion){
         case "1" :
@@ -131,11 +191,15 @@ while(isRunning){
             adQuirirServicio(calcularCosto(),cantidadCuotas)
             break;
         case "5" :
-            alert("Elegiste la opcion 5. Adios!")
+            alert("Opcion 5 de Administrador")
+            opcionesAdministrador()
+            break;
+        case "6" :
+            alert("Elegiste la opcion 6. Adios!")
             isRunning = false
             break;
         default : 
-            alert("No se ingreso un numero correcto\nDebe ser una de las siguientes opciones")
+            alert("No se ingreso un numero correcto")
             break;
     }
 
