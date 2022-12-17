@@ -97,8 +97,12 @@ function calcularCosto(){
 function calcularCuotas(cantidad){
     if(cantidad>12){
         alert("El maximo numero de cuotas es 12. Asegurate de colocar correctamente las cuotas")
+        cantidadCuotas = 1
+        costoCuota = 0
     }else if(calcularCosto()==0){
         alert("Primero se debe tener un servicio activo")
+        cantidadCuotas = 1
+        costoCuota = 0
     }else{
         costoCuota = calcularCosto() / cantidad
         alert("Seran " + cantidad + " cuota(s) de $" + costoCuota)
