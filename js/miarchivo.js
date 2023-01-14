@@ -37,7 +37,6 @@ function menuServicios(){
         menuDeServicios += i.toString() + ". " + servicios[i-1].nombre + "\n";
     }
     
-
     return menuDeServicios + (i++).toString() + ". Reiniciar\n" +  (i++).toString() + ". Listo";
 }
 
@@ -172,7 +171,7 @@ function opcionesAdministrador(){
     reiniciarServicios()
 }
 
-
+/*
 while(isRunning){
     let opcion = prompt(menuPrincipal)
 
@@ -207,4 +206,29 @@ while(isRunning){
             break;
     }
 
+}*/
+
+
+
+// ** MENU ACTIVO ** //
+
+let botonInicio = document.getElementById("tab-inicio")
+let botonCarrito = document.getElementById("tab-carrito")
+
+let contentInicio = document.getElementById("content-inicio")
+let contentCarrito = document.getElementById("content-carrito")
+
+
+botonInicio.onclick = () =>{
+    contentInicio.style.display = 'block';
+    contentCarrito.style.display = 'none';
 }
+
+botonCarrito.onclick = () =>{
+    contentInicio.style.display = 'none';
+    contentCarrito.style.display = 'block';
+}
+
+/* SERVICIOS */
+
+
