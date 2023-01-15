@@ -57,7 +57,7 @@
     transition: 0.4s ease;
 }
 
-.card-body button {
+.card-body button{
     display: inline-block;
     vertical-align: middle;
     -webkit-transform: perspective(1px) translateZ(0);
@@ -78,13 +78,16 @@
     color: white;
     -webkit-font-smoothing: antialiased;
 }
-
-
-
-.btn:focus {
-    background: #e18b34;
-    outline: 0;  
+ 
+.btn-costo{
+    display: inline-block;
+    vertical-align: middle;
+    background-color: #333333;
+    color: white;
 }
- 
 
- 
+#costoTotal {
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    font-size: 24px;
+}
