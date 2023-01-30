@@ -4,26 +4,29 @@ class Servicio {
         this.costo  = parseInt(obj.costo);
         this.estaActivo = obj.estaActivo;
     }
-
+    
     activarServicio(){
         this.estaActivo = true;
     }
     desactivarServicio(){
         this.estaActivo = false;
     }
+    obtenerCosto(){
+        return this.costo
+    }
 }
 
 const servicios = []
 
-servicios.push(new Servicio("Servicio de Armado","2000",false));
-servicios.push(new Servicio("Servicio Envio a Domicilio","500",false));
-servicios.push(new Servicio("Servicio de Puesta a Punto","700",false));
+servicios.push(new Servicio({nombre:"Servicio de Armado",costo:2000,estaActivo:false}));
+servicios.push(new Servicio({nombre:"Servicio Envio a Domicilio",costo:500,estaActivo:false}));
+servicios.push(new Servicio({nombre:"Servicio de Puesta a Punto",costo:700,estaActivo:false}));
 
 const guardarLocal = (clave, valor) => { localStorage.setItem(clave, valor) };
 for (const servicio of servicios) {
-    guardarLocal(servicios.nombre, JSON.stringify(servicio));
+    console.log("Lo guardo asi: " + JSON.stringify(servicio))
+    guardarLocal(servicio.nombre, JSON.stringify(servicio));
 }
-
 
 // ** MENU ACTIVO ** //
 
@@ -66,14 +69,18 @@ btnAgregarServicio1.onclick = () => {
     if(document.getElementById("status-serv1").innerText == ("Desactivado")){
         document.getElementById("status-serv1").innerText = 'Activado'
         cambiarBtnAEliminar(btnAgregarServicio1)
-        servicios[0].activarServicio()
-        localStorage.setItem('Servicio de Armado',JSON.stringify(servicios[0]));
+        console.log("jotason: " + localStorage.getItem("Servicio de Armado"))
+        let servicio1  = new Servicio(JSON.parse(localStorage.getItem("Servicio de Armado")))
+        servicio1.activarServicio()
+        localStorage.setItem('Servicio de Armado',JSON.stringify(servicio1));
     }else{
-        servicios[0].desactivarServicio()
+        let servicio1  = new Servicio(JSON.parse(localStorage.getItem("Servicio de Armado")))
+        servicio1.desactivarServicio()
         document.getElementById("status-serv1").innerText = "Desactivado"
         cambiarBtnAAgregar(btnAgregarServicio1)
-        localStorage.setItem('Servicio de Armado', JSON.stringify(servicios[0]));
+        localStorage.setItem('Servicio de Armado', JSON.stringify(servicio1));
     }
+    
 }
 
 
@@ -83,13 +90,15 @@ btnAgregarServicio2.onclick = () => {
     if(document.getElementById("status-serv2").innerText == "Desactivado"){
         document.getElementById("status-serv2").innerText = "Activado"
         cambiarBtnAEliminar(btnAgregarServicio2)
-        servicios[1].activarServicio()
-        localStorage.setItem('Servicio Envio a Domicilio', JSON.stringify(servicios[1]));
+        let servicio2 = new Servicio(JSON.parse(localStorage.getItem("Servicio Envio a Domicilio")))
+        servicio2.activarServicio()
+        localStorage.setItem('Servicio Envio a Domicilio', JSON.stringify(servicio2));
     }else{
-        servicios[1].desactivarServicio()
+        let servicio2 = new Servicio(JSON.parse(localStorage.getItem("Servicio Envio a Domicilio")))
+        servicio2.desactivarServicio()
         document.getElementById("status-serv2").innerText = "Desactivado"
         cambiarBtnAAgregar(btnAgregarServicio2)
-        localStorage.setItem('Servicio Envio a Domicilio', JSON.stringify(servicios[1]));
+        localStorage.setItem('Servicio Envio a Domicilio', JSON.stringify(servicio2));
     }
 }
 
@@ -97,36 +106,25 @@ btnAgregarServicio3.onclick = () => {
     if(document.getElementById("status-serv3").innerText == "Desactivado"){
         document.getElementById("status-serv3").innerText = "Activado"
         cambiarBtnAEliminar(btnAgregarServicio3)
-        servicios[2].activarServicio()
-        localStorage.setItem('Servicio de Puesta a Punto', JSON.stringify(servicios[2]));
+        let servicio3 = new Servicio(JSON.parse(localStorage.getItem("Servicio de Puesta a Punto")))
+        servicio3.activarServicio()
+        localStorage.setItem('Servicio de Puesta a Punto', JSON.stringify(servicio3));
     }else{
-        servicios[2].desactivarServicio()
+        let servicio3 = new Servicio(JSON.parse(localStorage.getItem("Servicio de Puesta a Punto")))
+        servicio3.desactivarServicio()
         document.getElementById("status-serv3").innerText = "Desactivado"
         cambiarBtnAAgregar(btnAgregarServicio3)
-        localStorage.setItem('Servicio de Puesta a Punto', JSON.stringify(servicios[2]));
+        localStorage.setItem('Servicio de Puesta a Punto', JSON.stringify(servicio3));
     }
 }
 
 
 function retornarTotal(){
-    let servicio1  = JSON.parse(localStorage.getItem("Servicio de Armado"))
-    let servicio2  = JSON.parse(localStorage.getItem("Servicio Envio a Domicilio"))
-    let servicio3  = JSON.parse(localStorage.getItem("Servicio de Puesta a Punto"))
+    let servicio1  = new Servicio(JSON.parse(localStorage.getItem("Servicio de Armado")))
+    let servicio2  = new Servicio(JSON.parse(localStorage.getItem("Servicio Envio a Domicilio")))
+    let servicio3  = new Servicio(JSON.parse(localStorage.getItem("Servicio de Puesta a Punto")))
 
-    let checkServicios = []
-    checkServicios.push(new Servicio(servicio1))
-    checkServicios.push(new Servicio(servicio2))
-    checkServicios.push(new Servicio(servicio3))
-
-    alert(checkServicios[0].costo)
-
-    let costoTotal = 0
-    for (let i = 0; i < checkServicios.length; i++) {
-        if(checkServicios[i].estaActivo)
-            costoTotal += checkServicios[i].costo;
-    }
-    
-    return costoTotal
+    return (servicio1.estaActivo?servicio1.obtenerCosto():0) + (servicio2.estaActivo?servicio2.obtenerCosto():0) + (servicio3.estaActivo?servicio3.obtenerCosto():0) 
 }
 
 let botonCosto = document.getElementById("botonCosto")
