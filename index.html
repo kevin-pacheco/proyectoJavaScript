@@ -2,11 +2,99 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>TECH-Nos</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
 </head>
 <body>
+
+    <nav class="container text-center navegador" style="margin-top: 2%;">
+      <ul class="nav nav-pills nav-fill  gap-2 p-1 rounded-5 shadow-sm" id="pillNav2" role="tablist" style="background-color: #333333; --bs-nav-link-color: #e18b34; --bs-nav-pills-link-active-color: white; --bs-nav-pills-link-active-bg:#e18b34;">
+        <li class="nav-item" role="inicio">
+          <button class="nav-link active rounded-5" id="tab-inicio" data-bs-toggle="tab" type="button" role="tab" aria-selected="true">Inicio</button>
+        </li>
+        <li class="nav-item" role="productos">
+          <button class="nav-link rounded-5" id="tab-carrito" data-bs-toggle="tab" type="button" role="tab" aria-selected="false">Carrito</button>
+        </li>
+      </ul>
+    </nav>
+    <div class="container text-center" id="content-inicio" style="margin-top: 10px; display: block; ">
+        <div class="d-flex flex-wrap justify-content-evenly">
+            <div class="bounce card" style="width: 18rem;">
+               <div class="container mt-3">
+                  <img src="https://cdn-icons-png.flaticon.com/512/46/46393.png" class="card-img-top " alt="...">
+               </div>
+               <div class="card-body">
+                  <h5 class="card-title ms-1">Servicio de Armado</h5>
+                  <p class="card-text mb-3 ms-1">Nos encargaremos del armado seguro de los componentes</p>
+                  <button class="btn mb-1 mt-1" id="serv1">Agregar servicio</button>
+               </div>
+            </div>
+            <div class="bounce card" style="width: 18rem;">
+                <div class="container mt-3">
+                   <img src="https://cdn-icons-png.flaticon.com/512/46/46393.png" class="card-img-top " alt="...">
+                </div>
+                <div class="card-body">
+                   <h5 class="card-title ms-1">Envío a Domicilio</h5>
+                   <p class="card-text mb-3 ms-1">Tu compra será entregada durante el día</p>
+                   <button class="btn mb-1 mt-1" id="serv2">Agregar servicio</button>
+                </div>
+             </div>
+             <div class="bounce card" style="width: 18rem;">
+               <div class="container mt-3">
+                  <img src="https://cdn-icons-png.flaticon.com/512/46/46393.png" class="card-img-top " alt="...">
+               </div>
+               <div class="card-body">
+                  <h5 class="card-title ms-1">Puesta a Punto</h5>
+                  <p class="card-text mb-3 ms-1">Nos aseguraremos de instalar todo lo necesario para usarla</p>
+                  <button class="btn mb-1 mt-1" id="serv3">Agregar servicio</button>
+               </div>
+            </div>
+         </div>
+    </div>
+    <div class="container text-center" id="content-carrito" style="margin-top: 1%; display: none;">
+        <table class="table">
+            <thead>
+                <tr>
+                <th scope="col">Status</th>
+                <th scope="col">Servicio</th>
+                <th scope="col">Descripción</th>
+                <th scope="col">Costo</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                <th id="status-serv1" scope="row">Desactivado</th>
+                <td>Servicio de Armado</td>
+                <td>Nos encargaremos del armado seguro de los componentes</td>
+                <td>$2000</td>
+                </tr>
+                <tr>
+                <th id="status-serv2" scope="row">Desactivado</th>
+                <td>Envío a domicilio</td>
+                <td>Tu compra será entregada durante el día</td>
+                <td>$500</td>
+                </tr>
+                <tr>
+                <th id="status-serv3" scope="row">Desactivado</th>
+                <td>Puesta a punto</td>
+                <td>Nos aseguraremos de instalar todo lo necesario para usarla</td>
+                <td>$700</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="container flex-box text-center span-fill rounded-5 gap-2 p-1 shadow-sm" style="margin-top: 2%; width: 50%; background-color:#ffbb77b1;"> 
+            <button class="btn-costo rounded-5 " id="botonCosto">Calcular total</button>
+            <div id="costoTotal"></div>
+        </div>
+    </div>
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
     <script src="js/miarchivo.js"></script>
 </body>
 </html>

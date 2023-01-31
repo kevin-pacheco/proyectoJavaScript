@@ -1,0 +1,93 @@
+/* Botones de NAVEGADOR */
+
+.navegador li button:hover {
+    color: white;
+}
+
+/* Display INICIO */
+
+.card {
+    margin: auto auto 2% auto;
+    border-radius: 40px; 
+    overflow: hidden;
+    border: 0;
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.06),
+                0 2px 4px rgba(0, 0, 0, 0.07);
+    transition: all 0.15s ease;
+}
+
+.card:hover {
+    box-shadow: 0 6px 30px rgba(0, 0, 0, 0.1),
+                0 10px 8px rgba(0, 0, 0, 0.015);
+}
+
+.card-body .card-title {
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    font-size: 24px;
+    color: #121212;
+}
+
+.card-text {
+    font-weight: 400;
+    font-size: 15px;
+    letter-spacing: 0.3px;
+    color: #4E4E4E;
+  
+}
+
+.card .container {
+    width: 88%;
+    background: #F0EEF8;
+    border-radius: 30px;
+    height: 140px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.container:hover > img {
+    transform: scale(1.2);
+}
+
+.container img {
+    padding: 75px;  
+    margin-top: -40px;
+    margin-bottom: -40px;
+    transition: 0.4s ease;
+}
+
+.card-body button{
+    display: inline-block;
+    vertical-align: middle;
+    -webkit-transform: perspective(1px) translateZ(0);
+    transform: perspective(1px) translateZ(0);
+    background-color: #333333;
+    color: white;
+    width: 98%;
+    font-weight: bold;
+    box-shadow: 0 0 1px #e18b34;
+    overflow: hidden;
+    -webkit-transition-duration: 0.5s;
+    transition-duration: 0.5s;
+    transition-property: color, background-color;
+}
+
+.card-body button:hover {
+    background-color: #e18b34;
+    color: white;
+    -webkit-font-smoothing: antialiased;
+}
+ 
+.btn-costo{
+    display: inline-block;
+    vertical-align: middle;
+    background-color: #333333;
+    color: white;
+}
+
+#costoTotal {
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    font-size: 24px;
+}

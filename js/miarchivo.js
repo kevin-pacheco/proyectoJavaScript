@@ -1,210 +1,135 @@
-
-var isRunning = true
-let bienvenida = "Bienvenido!\nIngrese una opcion" 
-let menuPrincipal = "1. Elegir servicios\n2. Calcular costo\n3. Elegir cuotas\n4. Adquirir servicio\n5. Administrador\n6. Salir"
-let menuAdmin = "1. Agregar nuevo servicio\n2. Eliminar Servicio\n3. Cantidad de servicios actuales\n4. Listo"
-
-let menu1Servicios = "1. Armado\n2. Envio a Domicilio\n3. Puesta a Punto\n4. Reiniciar\n5. Listo"
-
-
 class Servicio {
-    constructor(nombre, costo) {
-        this.nombre  = nombre;
-        this.costo  = parseInt(costo);
-        this.estaActivo = false;
+    constructor(obj) {
+        this.nombre  = obj.nombre;
+        this.costo  = parseInt(obj.costo);
+        this.estaActivo = obj.estaActivo;
     }
-
+    
     activarServicio(){
         this.estaActivo = true;
     }
     desactivarServicio(){
         this.estaActivo = false;
     }
+    obtenerCosto(){
+        return this.costo
+    }
 }
 
 const servicios = []
 
-servicios.unshift(new Servicio("Servicio de Armado","2000"));
-servicios.push(new Servicio("Servicio Envio a Domicilio","500"));
-servicios.push(new Servicio("Servicio de Puesta a Punto","700"));
+servicios.push(new Servicio({nombre:"Servicio de Armado",costo:2000,estaActivo:false}));
+servicios.push(new Servicio({nombre:"Servicio Envio a Domicilio",costo:500,estaActivo:false}));
+servicios.push(new Servicio({nombre:"Servicio de Puesta a Punto",costo:700,estaActivo:false}));
+
+const guardarLocal = (clave, valor) => { localStorage.setItem(clave, valor) };
+for (const servicio of servicios) {
+    console.log("Lo guardo asi: " + JSON.stringify(servicio))
+    guardarLocal(servicio.nombre, JSON.stringify(servicio));
+}
+
+// ** MENU ACTIVO ** //
+
+let botonInicio = document.getElementById("tab-inicio")
+let botonCarrito = document.getElementById("tab-carrito")
+
+let contentInicio = document.getElementById("content-inicio")
+let contentCarrito = document.getElementById("content-carrito")
 
 
+botonInicio.onclick = () =>{
+    contentInicio.style.display = 'block';
+    contentCarrito.style.display = 'none';
+}
 
-function menuServicios(){
-    let menuDeServicios = "";
-    let i = 1
-    for (; i <= servicios.length; i++){
-        menuDeServicios += i.toString() + ". " + servicios[i-1].nombre + "\n";
-    }
-    
+botonCarrito.onclick = () =>{
+    contentInicio.style.display = 'none';
+    contentCarrito.style.display = 'block';
+}
 
-    return menuDeServicios + (i++).toString() + ". Reiniciar\n" +  (i++).toString() + ". Listo";
+/* SERVICIOS */
+
+let btnAgregarServicio1 = document.getElementById("serv1")
+let btnAgregarServicio2 = document.getElementById("serv2")
+let btnAgregarServicio3 = document.getElementById("serv3")
+
+let estilo = ".card-body button { display: inline-block; vertical-align: middle; -webkit-transform: perspective(1px) translateZ(0); transform: perspective(1px) translateZ(0); background-color: #333333; color: white; width: 98%; font-weight: bold; box-shadow: 0 0 1px #e18b34; overflow: hidden; -webkit-transition-duration: 0.5s; transition-duration: 0.5s; transition-property: color, background-color; } .card-body button:hover { background-color: #e18b34; color: white; -webkit-font-smoothing: antialiased; } .card-body button:focus { background: #e18b34; outline: 0; }"
+
+function cambiarBtnAEliminar(boton){
+    boton.innerText = "Eliminar servicio"
+    boton.style.backgroundColor = "red"
+}
+function cambiarBtnAAgregar(boton){
+    boton.innerText = "Agregar servicio"
+    boton.style = estilo
 }
 
 
-let cantidadCuotas = 1
-let costoCuota = 0
-
-
-function reiniciarServicios(){
-
-    for (const servicio of servicios) {
-        servicio.desactivarServicio()
-    }
-    cantidadCuotas = 1
-    costoCuota = 0
-}
-
-function elegirServicios(){
-    let opcionServicio
-    
-    opcionServicio = parseFloat(prompt("Elige el servicio que deseas activar:\n" + menuServicios()))
-    while(opcionServicio<1 || opcionServicio>servicios.length+2){
-        if(opcionServicio<1 || opcionServicio>servicios.length+2) alert("Debes ingresar un numero correspondiente al servicio");
-        opcionServicio = parseFloat(prompt("Elige el servicio que deseas activar:\n" + menuServicios()));
-    }
-    while(true){
-        //opcionServicio>0 && opcionServicio<=servicios.length+2
-        if(opcionServicio<1 || opcionServicio>servicios.length+2){
-            alert("Debes ingresar un numero correspondiente al servicio");
-        }else{
-            if(opcionServicio<=servicios.length){
-                if(servicios[opcionServicio-1].estaActivo){
-                    alert("Ya tienes este servicio activo")
-                }else{
-                    servicios[opcionServicio-1].activarServicio()
-                    alert("Servicio activado")
-                }
-            }else{
-                if(opcionServicio==servicios.length+1){
-                    reiniciarServicios();
-                    alert("Servicios reiniciados");
-                }
-                if(opcionServicio==servicios.length+2){
-                    alert("Volviendo al menu principal");
-                    break;
-                }
-            }
-        }
-        opcionServicio = parseFloat(prompt("Elige el servicio que deseas activar:\n" + menuServicios()));
-    }
-}
-
-function calcularCosto(){
-    return (servicios.filter(s => s.estaActivo)).length>0?(servicios.filter(s => s.estaActivo).map(s => s.costo)).reduce((prev, next) => prev + next):0;
-}
-
-function calcularCuotas(cantidad){
-    if(cantidad>12){
-        alert("El maximo numero de cuotas es 12. Asegurate de colocar correctamente las cuotas")
-        cantidadCuotas = 1
-        costoCuota = 0
-    }else if(calcularCosto()==0){
-        alert("Primero se debe tener un servicio activo")
-        cantidadCuotas = 1
-        costoCuota = 0
+btnAgregarServicio1.onclick = () => {
+    if(document.getElementById("status-serv1").innerText == ("Desactivado")){
+        document.getElementById("status-serv1").innerText = 'Activado'
+        cambiarBtnAEliminar(btnAgregarServicio1)
+        console.log("jotason: " + localStorage.getItem("Servicio de Armado"))
+        let servicio1  = new Servicio(JSON.parse(localStorage.getItem("Servicio de Armado")))
+        servicio1.activarServicio()
+        localStorage.setItem('Servicio de Armado',JSON.stringify(servicio1));
     }else{
-        costoCuota = calcularCosto() / cantidad
-        alert("Seran " + cantidad + " cuota(s) de $" + costoCuota)
+        let servicio1  = new Servicio(JSON.parse(localStorage.getItem("Servicio de Armado")))
+        servicio1.desactivarServicio()
+        document.getElementById("status-serv1").innerText = "Desactivado"
+        cambiarBtnAAgregar(btnAgregarServicio1)
+        localStorage.setItem('Servicio de Armado', JSON.stringify(servicio1));
     }
+    
 }
 
-function adQuirirServicio(costoTotal,cantidadCuotas){
-    if(cantidadCuotas>12){
-        alert("Tienes que cambiar el numero de cuotas")
-    }else if(costoTotal==0){
-        alert("Primero debes tener un servicio activo")
+
+
+
+btnAgregarServicio2.onclick = () => {
+    if(document.getElementById("status-serv2").innerText == "Desactivado"){
+        document.getElementById("status-serv2").innerText = "Activado"
+        cambiarBtnAEliminar(btnAgregarServicio2)
+        let servicio2 = new Servicio(JSON.parse(localStorage.getItem("Servicio Envio a Domicilio")))
+        servicio2.activarServicio()
+        localStorage.setItem('Servicio Envio a Domicilio', JSON.stringify(servicio2));
     }else{
-        console.log("Costo total del servicio: " + costoTotal)
-        console.log("Se realizara el pago en " + (costoCuota!=0?cantidadCuotas:1) + " cuota(s) de $" + (cantidadCuotas==1?costoTotal:costoCuota) + " sin interes.")
-        console.log("Gracias por usar nuestro servicio!")
-        isRunning = false
+        let servicio2 = new Servicio(JSON.parse(localStorage.getItem("Servicio Envio a Domicilio")))
+        servicio2.desactivarServicio()
+        document.getElementById("status-serv2").innerText = "Desactivado"
+        cambiarBtnAAgregar(btnAgregarServicio2)
+        localStorage.setItem('Servicio Envio a Domicilio', JSON.stringify(servicio2));
     }
-}   
-
-
-
-function agregarNuevoServicio(){
-    servicios.push(new Servicio(prompt("Ingrese nombre del servicio"),prompt("Ingrese el costo del servicio")))
-    alert("Servicio agregado!\nAhora cuenta con " + servicios.length + " servicios")
 }
 
-function eliminarServicio(){
-    let i = 1
-    let serviciosDisponibles = ""
-    for (; i <= servicios.length; i++){
-        serviciosDisponibles += i.toString() + ". " + servicios[i-1].nombre + "\n";
+btnAgregarServicio3.onclick = () => {
+    if(document.getElementById("status-serv3").innerText == "Desactivado"){
+        document.getElementById("status-serv3").innerText = "Activado"
+        cambiarBtnAEliminar(btnAgregarServicio3)
+        let servicio3 = new Servicio(JSON.parse(localStorage.getItem("Servicio de Puesta a Punto")))
+        servicio3.activarServicio()
+        localStorage.setItem('Servicio de Puesta a Punto', JSON.stringify(servicio3));
+    }else{
+        let servicio3 = new Servicio(JSON.parse(localStorage.getItem("Servicio de Puesta a Punto")))
+        servicio3.desactivarServicio()
+        document.getElementById("status-serv3").innerText = "Desactivado"
+        cambiarBtnAAgregar(btnAgregarServicio3)
+        localStorage.setItem('Servicio de Puesta a Punto', JSON.stringify(servicio3));
     }
-    
-    let servicioEliminado = parseInt(prompt("Elige el servicio a eliminar:\n" + serviciosDisponibles))
-    let nombreServicioEliminado = servicios[servicioEliminado-1].nombre
-    servicios.splice(servicioEliminado-1,1)
-
-    alert("Se elimno el siguiente servicio: \n" + nombreServicioEliminado)
-
 }
 
 
-function opcionesAdministrador(){
-    
-    let runningAdmin = true
-    while(runningAdmin){    
-        opcionAdmin = prompt("Bienvenido admin! Elige una de las opciones:\n" + menuAdmin)
-        switch(opcionAdmin){
-            case "1" :
-                agregarNuevoServicio()
-                break;
-            case "2" :
-                eliminarServicio()
-                break;
-            case "3" :
-                alert("Actualmente cuenta con " + servicios.length + " servicios")
-                break;
-            case "4" :
-                runningAdmin = false
-                alert("Cerrando sesion administrador")
-                break;
-            default : 
-                alert("No se ingreso un numero correcto")
-                break;
-        }
-    }
-    reiniciarServicios()
+function retornarTotal(){
+    let servicio1  = new Servicio(JSON.parse(localStorage.getItem("Servicio de Armado")))
+    let servicio2  = new Servicio(JSON.parse(localStorage.getItem("Servicio Envio a Domicilio")))
+    let servicio3  = new Servicio(JSON.parse(localStorage.getItem("Servicio de Puesta a Punto")))
+
+    return (servicio1.estaActivo?servicio1.obtenerCosto():0) + (servicio2.estaActivo?servicio2.obtenerCosto():0) + (servicio3.estaActivo?servicio3.obtenerCosto():0) 
 }
 
+let botonCosto = document.getElementById("botonCosto")
+let TOTAL_AMOUNT = document.getElementById("costoTotal")
 
-while(isRunning){
-    let opcion = prompt(menuPrincipal)
-
-    switch(opcion){
-        case "1" :
-            alert("Elegiste la opcion 1")
-            elegirServicios()
-            break;
-        case "2" :
-            alert("Elegiste la opcion 2")
-            if(calcularCosto()==0) alert("Aun no se ha elegido un servicio"); else alert("El costo total es de: $" + calcularCosto())
-            break;
-        case "3" :
-            alert("Elegiste la opcion 3")
-            cantidadCuotas = prompt("Elige la cantidad de cuotas")
-            calcularCuotas(cantidadCuotas)
-            break;
-        case "4" :
-            alert("Elegiste la opcion 4")
-            adQuirirServicio(calcularCosto(),cantidadCuotas)
-            break;
-        case "5" :
-            alert("Opcion 5 de Administrador")
-            opcionesAdministrador()
-            break;
-        case "6" :
-            alert("Elegiste la opcion 6. Adios!")
-            isRunning = false
-            break;
-        default : 
-            alert("No se ingreso un numero correcto")
-            break;
-    }
-
+botonCosto.onclick = () => {
+    TOTAL_AMOUNT.innerText = retornarTotal()    
 }
